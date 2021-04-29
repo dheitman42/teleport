@@ -16,7 +16,7 @@
       ]
     },
     {
-      "icon": "window",
+      "icon": "server",
       "title": "Server Access",
       "entries": [
         { "title": "Introduction", "slug": "/server-access/introduction/" },

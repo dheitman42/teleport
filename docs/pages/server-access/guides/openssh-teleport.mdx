@@ -37,7 +37,7 @@ existing SSH implementations, such as OpenSSH. This section will cover:
 
 ## Architecture
 
-![Teleport OpenSSH Recording Proxy](../img/openssh-proxy.svg)
+![Teleport OpenSSH Recording Proxy](../../../img/openssh-proxy.svg)
 
 The recording proxy mode, although less secure, was added to allow Teleport users
 to enable session recording for OpenSSH's servers running `sshd`, which is helpful
@@ -64,10 +64,10 @@ Teleport OpenSSH supports:
 
 ## Setting up OpenSSH Recording Proxy Mode
 
-The first step is install and setup Teleport, we recommend starting with our [Getting Started Guide](getting-started.mdx) and [Admin Manual](admin-guide.mdx).
+The first step is install and setup Teleport, we recommend starting with our [Getting Started Guide](../../getting-started.mdx) and [Admin Manual](../../admin-guide.mdx).
 
 To enable session recording for `sshd` nodes, the cluster must be switched to
-["recording proxy" mode](architecture/proxy.mdx#recording-proxy-mode).
+["recording proxy" mode](../../architecture/proxy.mdx#recording-proxy-mode).
 
 In this mode, the recording will be done on the proxy level:
 
@@ -159,7 +159,7 @@ HostKey /etc/ssh/api.example.com
 HostCertificate /etc/ssh/api.example.com-cert.pub
 ```
 
-Now you can use [`tsh ssh --port=22 user@api.example.com`](cli-docs.mdx#tsh) to login
+Now you can use [`tsh ssh --port=22 user@api.example.com`](../../cli-docs.mdx#tsh) to login
 into any `sshd` node in the cluster and the session will be recorded.
 
 ```bash
@@ -242,7 +242,7 @@ certificate authorities for each cluster individually.
   type="tip"
   title="OpenSSH and Trusted Clusters"
 >
-  If you use [recording proxy mode](architecture/proxy.mdx) and [trusted clusters](trustedclusters.mdx),
+  If you use [recording proxy mode](../../architecture/proxy.mdx) and [trusted clusters](../../trustedclusters.mdx),
   you need to set up the certificate authority from
   the *root* cluster to match **all** nodes, even those that belong to *leaf*
   clusters. For example, if your node naming scheme is `*.root.example.com`,

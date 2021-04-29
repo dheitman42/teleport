@@ -118,7 +118,7 @@ ssh_service:
      enabled: false
 ```
 
-![Teleport SSH without MOTD](../../img/motd/teleport-no-MOTD.png)
+![Teleport SSH without MOTD](../../../img/motd/teleport-no-MOTD.png)
 
 ### Example node with PAM enabled
 
@@ -140,7 +140,7 @@ ssh_service:
      enabled: true
 ```
 
-![Teleport SSH with MOTD](../../img/motd/teleport-with-MOTD.png)
+![Teleport SSH with MOTD](../../../img/motd/teleport-with-MOTD.png)
 
 When PAM is enabled it will use the default `sshd` config file. This can differ per
 distro.
@@ -233,7 +233,7 @@ $ cat /etc/motd
 WARNING: All activity on this node is being recorded by Teleport
 ```
 
-![Teleport SSH with updated MOTD](../../img/motd/teleport-with-updated-MOTD.png)
+![Teleport SSH with updated MOTD](../../../img/motd/teleport-with-updated-MOTD.png)
 
 ## Creating local users with Teleport
 
@@ -327,7 +327,7 @@ biometrics.
 
 Note that Teleport enables strong SSH authentication out of the box using
 certificates. For most users, hardening [the initial Teleport
-authentication](../admin-guide.mdx#authentication) (e.g. `tsh login`) is preferred.
+authentication](../../admin-guide.mdx#authentication) (e.g. `tsh login`) is preferred.
 
 By default, `auth` modules are not used to avoid the default system behavior
 (usually using local Unix passwords). You can enable them by setting
