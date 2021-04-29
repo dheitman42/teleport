@@ -17,6 +17,24 @@
     },
     {
       "icon": "window",
+      "title": "Server Access",
+      "entries": [
+        { "title": "Introduction", "slug": "/server-access/introduction/" },
+        { "title": "Getting Started", "slug": "/server-access/getting-started/" },
+        {
+          "title": "Guides",
+          "slug": "/server-access/guides/",
+          "entries": [
+            { "title": "SSH", "slug": "/server-access/guides/teleport-ssh/" },
+            { "title": "Using Teleport with PAM", "slug": "/server-access/guides/ssh-pam/" },
+            { "title": "OpenSSH Guide", "slug": "/server-access/guides/openssh-teleport/" }
+          ]
+        },
+        { "title": "Reference", "slug": "/server-access/reference/" }
+      ]
+    },
+    {
+      "icon": "window",
       "title": "Application Access",
       "entries": [
         { "title": "Introduction", "slug": "/application-access/introduction/" },
@@ -110,8 +128,7 @@
       "entries": [
         { "title": "AWS", "slug": "/aws-oss-guide/" },
         { "title": "GCP", "slug": "/gcp-guide/" },
-        { "title": "IBM", "slug": "/ibm-cloud-guide/" },
-        { "title": "OpenSSH Guide", "slug": "/openssh-teleport/" }
+        { "title": "IBM", "slug": "/ibm-cloud-guide/" }
       ]
     },    
     {
@@ -161,8 +178,7 @@
         {
           "title": "BPF Session Recording",
           "slug": "/features/enhanced-session-recording/"
-        },
-        { "title": "Using Teleport with PAM", "slug": "/features/ssh-pam/" }
+        }
       ]
     },
     {
@@ -240,6 +256,16 @@
     {
       "source": "/kubernetes-ssh/",
       "destination": "/kubernetes-access/",
+      "permanent": true
+    },
+    {
+      "source": "/features/ssh-pam/",
+      "destination": "/server-access/guides/ssh-pam/",
+      "permanent": true
+    },
+    {
+      "source": "/openssh-teleport/",
+      "destination": "/server-access/guides/ssh-pam/",
       "permanent": true
     }
   ]
