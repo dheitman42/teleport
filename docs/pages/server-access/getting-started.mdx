@@ -158,7 +158,7 @@ Now, we've got our cluster up and running. Let's see how easy it is to connect t
      Extensions:         permit-agent-forwarding, permit-port-forwarding, permit-pty
    ```
 
-  - `auth-admin` is now logged iton the `auth.example.com` cluster and `auth` Node via Teleport SSH - no third-party tool required.
+  - `auth-admin` is now logged into the `auth.example.com` cluster and `auth` Node via Teleport SSH - no third-party tool required.
 
 3. `auth-admin` can now execute the following to find the cluster's `nodenames` which are used for direct SSH connections:
 
@@ -183,7 +183,7 @@ Now, we've got our cluster up and running. Let's see how easy it is to connect t
 
 ## Step 3/3 Inspect and manage the cluster 
 
-Now, `auth-admin` has the ability to SSH into other Nodes within the cluster, traverse the Linux file system, and execute command.
+Now, `auth-admin` has the ability to SSH into other Nodes within the cluster, traverse the Linux file system, and execute the command.
 
 They can also quickly survey any Node that's been assigned a `label`.
 
@@ -199,10 +199,10 @@ They can also quickly survey any Node that's been assigned a `label`.
 2. As a result, `auth-admin` can execute `tsh ssh root@env=example` since each Node has [label](../admin-guide.mdx#labeling-nodes-and-applications) by default. 
 
    - Customized labels can be defined in your `teleport.yaml` configuration file or during Node creation.
-   - This is a convenient feature that allows for more advanced query. For example, suppose an IP address changes (but the label doesn't). An admin can quickly find the current Node with that label.
+   - This is a convenient feature that allows for more advanced queries. For example, suppose an IP address changes (but the label doesn't). An admin can quickly find the current Node with that label.
 
 
-3. `auth-admin` can also execute commands on all Nodes that have share a label vastly simplifying repeated operations:
+3. `auth-admin` can also execute commands on all Nodes that share a label vastly simplifying repeated operations:
 
    - `tsh ssh root@env=example ls` will execute the `ls` command on each Node displaying the contents of each to the screen.
 
