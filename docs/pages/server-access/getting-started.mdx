@@ -27,32 +27,35 @@ The steps below involve:
 
 1. Verify you have a registered domain name. 
 
-  i. We'll create two subdomains, one for each Linux instance: `auth.example.com` and `ssh.example.com`.
+   i. We'll create two subdomains, one for each Linux instance: `auth.example.com` and `ssh.example.com`.
 
-  ![Subdomains](../../img/server-access/subdomains.png)
+    ![Subdomains](../img/server-access/subdomain.svg)
 
-  ii. Then, we'll associate TLS (SSL) certificates from Let's Encrypt with them below.
+   ii. Then, we'll associate TLS (SSL) certificates from Let's Encrypt with them below.
 
 2. Create two new instances of your desired Linux distribution (such as CentOS, Debian, Ubuntu).
 
-  <Admonition type="tip">
-    Multiple Teleport Nodes can be run on the same Linux instance. This Guide details how to launch and connect two Nodes on different devices.
-  </Admonition>
+   <Admonition type="tip">
+     Multiple Teleport Nodes can be run on the same Linux instance. This Guide details how to launch and connect two Nodes on different devices.
+   </Admonition>
 
-  i. Add an `A` record in your domain registrar entry for each Linux instance.  
-  ii. Map the first IP address to the `auth` subdomain and the second IP address to the `ssh` subdomain.  
-  iii. Create the necessary SSH keys and connect from your local machine to each using the following `ssh` command format:
+   i. Add an `A` record in your domain registrar entry for each Linux instance. 
 
-    - `aws % ssh -i "example.pem" ubuntu@ecX-X-XX-XXX-XX.us-north-2.compute.amazonaws.com`  
-    - Most cloud providers require SSH to initially access, configure, and provision your cloud instances. We'll configure and launch our instances then demonstrate how to use the `tsh` tool and Teleport in SSH mode thereafter.
+   ii. Map the first IP address to the `auth` subdomain and the second IP address to the `ssh` subdomain.  
+
+   iii. Create the necessary SSH keys and connect from your local machine to each using the following `ssh` command format:
+
+     - `aws % ssh -i "example.pem" ubuntu@ecX-X-XX-XXX-XX.us-north-2.compute.amazonaws.com`  
+  
+   Most cloud providers require SSH to initially access, configure, and provision your cloud instances. We'll configure and launch our instances then demonstrate how to use the `tsh` tool and Teleport in SSH mode thereafter.
 
 3. Install certbot and acquire TLS (SSL) certificates from Let's Encrypt:
 
-  <Admonition type="note">
-    certbot is the offical ACME client from Let's Encrypt. It allows you to easily acquire and renew TLS certificates for registered domains.
-  </Admonition>
+   <Admonition type="note">
+     certbot is the offical ACME client from Let's Encrypt. It allows you to easily acquire and renew TLS certificates for registered domains.
+   </Admonition>
 
-  i.  Update your Linux distro and install certbot:
+   i.  Update your Linux distro and install certbot:
 
     ```bash
     # Install certbot
@@ -60,9 +63,10 @@ The steps below involve:
     sudo apt-get install certbot
     ```
 
-  ii. Acquire a certificate for the instance.
+   ii. Acquire a certificate for the instance.
 
     ```bash
+    # Acquire SSL
     sudo certbot certonly --standalone \
       -d auth.example.com \
       -n \
@@ -72,45 +76,48 @@ The steps below involve:
        
 4. Install Teleport on each instance.
 
-  ```bash
-  # Install Teleport
-  curl https://deb.releases.teleport.dev/teleport-pubkey.asc | sudo apt-key add -
-  sudo add-apt-repository 'deb https://deb.releases.teleport.dev/ stable main'
-  sudo apt-get update
-  sudo apt-get install teleport
-  ```
+   ```bash
+   # Install Teleport
+   curl https://deb.releases.teleport.dev/teleport-pubkey.asc | sudo apt-key add -
+   sudo add-apt-repository 'deb https://deb.releases.teleport.dev/ stable main'
+   sudo apt-get update
+   sudo apt-get install teleport
+   ```
 
 5. Since we're using Let's Encrypt certbot, configure Teleport to use ACME:
 
-  <Admonition type="tip">
+   <Admonition type="tip">
     Teleport supports any ACME provider. We'll stick with Let's Encrypt for this Guide but feel free to use whichever you prefer.
-  </Admonition>
+   </Admonition>
 
-  ```bash
-  sudo teleport configure \
-    --acme --acme-email=your_email@example.com \
-    --cluster-name=auth.example.com \
-    -o file
-  ```
+   ```bash
+   # Configure Teleport
+   sudo teleport configure \
+     --acme --acme-email=your_email@example.com \
+     --cluster-name=auth.example.com \
+     -o file
+   ```
 
-6. Launch Teleport on `auth.example.com`: `sudo teleport start`.  
+6. Launch Teleport on `auth.example.com`: `sudo teleport start`. 
+
 7. Now, create a third terminal and connect to `auth.example.com`:
 
-  i. Create a user to access the `auth.example.com` Web UI: 
+   i. Create a user to access the `auth.example.com` Web UI: 
 
     - `sudo tctl users add auth-admin --roles=editor,access,admin --logins=root,ubuntu,ec2-user`  
 
-  ii. This will generate an initial login link where you can set a password and set up Two-Factor Authentication for `auth-admin`.
+   ii. This will generate an initial login link where you can set a password and set up Two-Factor Authentication for `auth-admin`.
 
-  iii. Create a *join token* to link `ssh.example.com` with the `auth.example.com` cluster:
+   iii. Create a *join token* to link `ssh.example.com` with the `auth.example.com` cluster:
 
     - `sudo tctl tokens add --type=node`  
     - "Node" mode specifies that the Teleport Node that will join will act as an SSH server.  
 
-  iv. You should see:
+   iv. You should see:
 
     ```bash
-    teleport start \
+    # Join cluster
+    sudo teleport start \
       --roles=node \
       --token=d62629ea83e181644e0778af22ec3a8e \
       --ca-pin=sha256:c75f8be5b21a5cc1b6f91a71200f30a9a083dfea4fc47ec1c55143ccce8882e4 \
@@ -123,15 +130,81 @@ The steps below involve:
 
 8. On your second terminal, `ssh.example.com`:
 
-  i. Run the command above with the correct `auth.example.com` public proxy address.
+   i. Run the command above with the correct `auth.example.com` public proxy address.
 
-  ii. You should now be able to view both Nodes at: `https://auth.example.com/web/cluster/auth.example.com/nodes` in the Web Interface after logging in with your the user `auth-admin`.
+   ii. You should now be able to view both Nodes at: `https://auth.example.com/web/cluster/auth.example.com/nodes` in the Web Interface after logging in with your the user `auth-admin`.
 
-  !![Both Nodes in UI](../../img/server-access/teleport_ui.png)
+   ![Both Nodes in](../img/server-access/subdomain.svg)
 
 ## Step 2/3 Use tsh to connect to the cluster
 
+Now, we've got our cluster up and running. Let's see how easy it is to connect to our two nodes:
+
+1. On your local machine, login through `tsh`: 
+
+   i. `tsh login --proxy=auth.example.com:443 --user=auth-admin`  
+   ii. You'll be prompted to for the password and One Time Pass code we set up previously.
+
+2. `auth-admin` will now see:
+
+   ```bash
+   Profile URL:        https://auth.example.com:443
+     Logged in as:       auth-admin
+     Cluster:            auth.example.com
+     Roles:              access, admin, editor
+     Logins:             root, ubuntu, ec2-user
+     Kubernetes:         disabled
+     Valid until:        2021-04-30 06:39:13 -0500 CDT [valid for 12h0m0s]
+     Extensions:         permit-agent-forwarding, permit-port-forwarding, permit-pty
+   ```
+
+  - `auth-admin` is now logged iton the `auth.example.com` cluster and `auth` Node via Teleport SSH - no third-party tool required.
+
+3. `auth-admin` can now execute the following to find the cluster's `nodenames` which are used for direct SSH connections:
+
+   i. `tctl nodes ls`
+   ii. The `auth` node is located on the bottom line below:
+
+   ```bash
+   Nodename         UUID                                 Address        Labels                                
+   ---------------- ------------------------------------ -------------- ------------------------------------- 
+   ip-172-31-30-155 8f1e2719-3161-400f-b664-3279cf046511                env=example,hostname=ip-172-31-30-155 
+   ip-172-31-17-124 e7719967-b6eb-4fc0-8e53-00fac6d896d4 127.0.0.1:3022 env=example,hostname=ip-172-31-17-124 
+   ```
+
+4. Using the command `tsh ssh root@ip-172-31-17-124` locally, `auth-admin` can SSH into the `auth` Node and do the following:
+
+   i. Connect to other Nodes in the cluster by repeating the steps above.  
+   ii. Traverse the Linux file system.  
+   iii. Execute commands.  
+
+   - Essentially, everything one would do if they were going to SSH into a server using a third-party tool. 
+   -  All commands executed by `auth-admin` are recorded in the Web UI.
+
 ## Step 3/3 Inspect and manage the cluster 
+
+Now, `auth-admin` has the ability to SSH into other Nodes within the cluster, traverse the Linux file system, and execute command.
+
+They can also quickly survey any Node that's been assigned a `label`.
+
+1. Executing `tctl nodes ls` displays:
+
+   ```bash
+   Nodename         UUID                                 Address        Labels                                
+   ---------------- ------------------------------------ -------------- ------------------------------------- 
+   ip-172-31-30-155 8f1e2719-3161-400f-b664-3279cf046511                env=example,hostname=ip-172-31-30-155 
+   ip-172-31-17-124 e7719967-b6eb-4fc0-8e53-00fac6d896d4 127.0.0.1:3022 env=example,hostname=ip-172-31-17-124 
+   ```
+
+2. As a result, `auth-admin` can execute `tsh ssh root@env=example` since each Node has [label](../admin-guide.mdx#labeling-nodes-and-applications) by default. 
+
+   - Customized labels can be defined in your `teleport.yaml` configuration file or during Node creation.
+   - This is a convenient feature that allows for more advanced query. For example, suppose an IP address changes (but the label doesn't). An admin can quickly find the current Node with that label.
+
+
+3. `auth-admin` can also execute commands on all Nodes that have share a label vastly simplifying repeated operations:
+
+   - `tsh ssh root@env=example ls` will execute the `ls` command on each Node displaying the contents of each to the screen.
 
 ## Resources
 
